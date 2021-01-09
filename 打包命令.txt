@@ -1,0 +1,1 @@
+pyinstaller -F -w -i dog.ico main.py -p C:/python/Asuka/venv/lib/site-packages 

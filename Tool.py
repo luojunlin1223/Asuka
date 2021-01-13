@@ -41,14 +41,36 @@ def nav(xlo, ylo):
     x, y = find(imsch=ac.imread("backimage/move_btn.bmp"), target="move_btn")
     click(x, y)
     auto.press('esc')
-    if(xlo=='287'and ylo== '77'):
-        shaqichuansong()
-        return 1
-    if(xlo=='32'and ylo=='162'):
-        shaqichuansong()
-        return 1
-    arrive()
-    return 1
+
+def find_re(imsch,target):
+    while True:
+        auto.screenshot("src.png")
+        imsrc = ac.imread("src.png")
+        position = ac.find_template(imsrc, imsch)
+        i = 0
+        while (position is None):
+            i += 1
+            print("找不到： " + target)
+            auto.screenshot("src.png")
+            imsrc = ac.imread("src.png")
+            position = ac.find_template(imsrc, imsch)
+            time.sleep(5)
+        area = position['rectangle']
+        left = area[0][0]
+        right = area[2][0]
+        top = area[1][1]
+        bottom = area[0][1]
+        width = abs(left - right)
+        height = abs(top - bottom)
+        auto.screenshot("waittov/" + target + ".png", region=(left, bottom, width, height))
+        diff = Similary.similary_calculate("waittov/" + target + ".png", "backimage/" + target + ".bmp", 1)
+        print(diff)
+        if (diff > 0.7):
+            print("找到：" + target)
+            x, y = position['result']
+            return x, y, area
+        print("准确度不匹配：" + target)
+        time.sleep(1)
 
 
 def find(imsch, target):
@@ -90,6 +112,18 @@ def click(x, y):
 
 def findandclick(string):
     global imsch
+    if (string == 'huanpiao'):
+        imsch = ac.imread("backimage/huanpiao.bmp")
+    if (string == 'cailiao'):
+        imsch = ac.imread("backimage/cailiao.bmp")
+    if (string == 'dibang'):
+        imsch = ac.imread("backimage/dibang.bmp")
+    if (string == 'zhengbei'):
+        imsch = ac.imread("backimage/zhengbei.bmp")
+    if (string == 'lingpiao'):
+        imsch = ac.imread("backimage/lingpiao.bmp")
+    if (string == 'wobang'):
+        imsch = ac.imread("backimage/wobang.bmp")
     if (string == 'death'):
         imsch = ac.imread("backimage/death.bmp")
     if (string == 'navigation_btn'):
@@ -134,6 +168,22 @@ def findandclick(string):
         imsch = ac.imread('backimage/liaoxitarget.bmp')
     if (string == 'jixu'):
         imsch = ac.imread('backimage/jixu.bmp')
+    if (string == 'back_to_home'):
+        imsch = ac.imread('backimage/back_to_home.bmp')
+    if (string == 'daocaoren'):
+        imsch = ac.imread('backimage/daocaoren.bmp')
+    if (string == 'zhongzhizaochan'):
+        imsch = ac.imread('backimage/zhongzhizaochan.bmp')
+    if (string == 'zhongzhi5'):
+        imsch = ac.imread('backimage/zhongzhi5.bmp')
+    if (string == 'qianbushiqu'):
+        imsch = ac.imread('backimage/quanbushiqu.bmp')
+    if (string == 'zhengnan'):
+        imsch = ac.imread('backimage/zhengnan.bmp')
+    if (string == 'liangshi'):
+        imsch = ac.imread('backimage/liangshi.bmp')
+    if (string == 'chenchu'):
+        imsch = ac.imread('backimage/chenchu.bmp')
     x, y = find(imsch, string)
     click(x, y)
 
@@ -156,8 +206,12 @@ def shaqichuansong():
 
 
 def arrive():
+    start_time=time.time()
     while True:
+        end_time=time.time()
         if (Exist(imsch=ac.imread("backimage/qiehuanchangjing.bmp"), target='qiehuanchangjing')):
+            break
+        if(abs(start_time-end_time)>60*2):
             break
     print("已经到达")
     time.sleep(5)
@@ -176,3 +230,10 @@ def nav_npc(npc):
             break
     print("已经找到npc")
 
+
+def adjust_click(location, clicklocation):
+    nav(location[0], location[1])
+    auto.hotkey('altleft', 'v')
+    time.sleep(1)
+    click(int(clicklocation[0]), int(clicklocation[1]))
+    click(int(clicklocation[0]), int(clicklocation[1]))

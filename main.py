@@ -38,9 +38,6 @@ class Window(QWidget):
         self.Removeob=RemoveOb()
         self.Removeob.finished.connect(self.threadFinished)
         self.Removeob.postSignal_Rem.connect(self.update_Rem)
-
-
-        self.shop_first=shop_first()
         self.shop_second=shop_second()
 
 
@@ -58,12 +55,6 @@ class Window(QWidget):
         self.song_btn = song_btn
         song_btn.setText("自动回根据地")
         song_btn.resize(self.btn_w, self.btn_h)
-
-        shop_first_btn = QPushButton(self)
-        self.shop_first_btn = shop_first_btn
-        shop_first_btn.setText("跑商去")
-        shop_first_btn.resize(self.btn_w, self.btn_h)
-        shop_first_btn.move(0,300)
 
         shop_second_btn = QPushButton(self)
         self.shop_second_btn = shop_second_btn
@@ -146,9 +137,7 @@ class Window(QWidget):
         attack_btn.clicked.connect(self.attack)
         autoattack_btn.clicked.connect(self.autoattack)
         Removeob_btn.clicked.connect(self.removeob)
-        shop_first_btn.clicked.connect(self.Shop_first)
         shop_second_btn.clicked.connect(self.Shop_second)
-
         dig_btn.clicked.connect(self.Dig)
     def Dig(self):
         if(self.dig.isRunning()):
@@ -156,8 +145,6 @@ class Window(QWidget):
         self.dig.start()
     def Shop_second(self):
         self.shop_second.start()
-    def Shop_first(self):
-        self.shop_first.start()
     def removeob(self):
         self.Removeob.start()
         self.infromationtext_Rem.setText("抗干扰启动")

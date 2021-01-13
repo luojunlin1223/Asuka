@@ -15,5 +15,8 @@ def ImageRead(path):
     result = str(client.basicGeneral(image)['words_result'][0]['words'])
     where = result[result.index('到') + 1:result.index('的')]
     location = result[result.index('[') + 1:result.index(']')]
-    x, y = location.split(',')
-    return where, x, y
+    if ',' in location:
+        x, y = location.split(',')
+        return where, x, y
+    else:
+        ImageRead(path)
